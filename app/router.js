@@ -29,6 +29,9 @@ const IndexController = Nodal.require('app/controllers/index_controller.js');
 
 /* generator: begin imports */
 
+const ApiPostsController = Nodal.require('app/controllers/api/posts_controller.js');
+const ApiUsersController = Nodal.require('app/controllers/api/users_controller.js');
+const ApiAccessTokensController = Nodal.require('app/controllers/api/access_tokens_controller.js');
 
 /* generator: end imports */
 
@@ -36,6 +39,9 @@ router.route('/').use(IndexController);
 
 /* generator: begin routes */
 
+router.route('/api/posts/{id}').use(ApiPostsController);
+router.route('/api/users/{id}').use(ApiUsersController);
+router.route('/api/access_tokens/{id}').use(ApiAccessTokensController);
 
 /* generator: end routes */
 
