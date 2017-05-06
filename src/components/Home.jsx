@@ -2,20 +2,25 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       posts: []
     };
   }
 
-  componentDidMount() {
+  getPosts(){
     axios.get(`${process.env.REACT_APP_API_ENDPOINT}/posts`)
       .then(res => {
         const posts = res.data.data;
         this.setState({ posts });
       });
+  }
+
+  // Component lifecycle
+  componentDidMount() {
+    this.getPosts();
   }
 
   render() {

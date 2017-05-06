@@ -8,7 +8,7 @@ class Header extends Component {
         <div className='container'>
           <div className='header__wrapper'>
             <div className='header__logo'>
-              SK blog
+              SK
             </div>
             <ul className='header__menu'>
               <li><Link to='/'>Home</Link></li>
