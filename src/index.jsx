@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 
+// modules
+import Auth from './modules/Auth';
 
 // blocks
 import Header from './containers/Header'
@@ -18,6 +20,16 @@ import './bower/normalize-css/normalize.css'
 
 import './css/style.sss';
 
+class Logout extends Component {
+  componentWillMount(){
+    Auth.deauthenticateUser();
+  }
+  render() {
+    return (
+      <Redirect to="/"/>
+    )
+  }
+}
 class App extends Component {
   render() {
     return (
@@ -30,6 +42,7 @@ class App extends Component {
               <Route path='/category' component={Category} />
               <Route path='/post' component={Post} />
               <Route path='/admin' component={Admin} />
+              <Route path='/logout' component={Logout}/>
               <Route component={NotFound} />
             </Switch>
           </div>

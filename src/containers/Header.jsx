@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
+import Auth from '../modules/Auth';
 
 class Header extends Component {
   render() {
@@ -11,10 +12,15 @@ class Header extends Component {
               SK
             </div>
             <ul className='header__menu'>
-              <li><Link to='/'>Home</Link></li>
-              <li><Link to='/category'>Category</Link></li>
-              <li><Link to='/post'>Post</Link></li>
-              <li><Link to='/admin'>Admin</Link></li>
+              <li><NavLink exact to='/'>Home</NavLink></li>
+              <li><NavLink to='/category'>Category</NavLink></li>
+              <li><NavLink to='/post'>Post</NavLink></li>
+              <li><NavLink to='/admin'>Admin</NavLink></li>
+              {Auth.isUserAuthenticated() ? (
+                <li><Link to='/logout'>Logout</Link></li>
+              ) : (
+                <span></span>
+              )}
             </ul>
           </div>
         </div>

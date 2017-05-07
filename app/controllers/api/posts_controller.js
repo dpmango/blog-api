@@ -58,9 +58,21 @@ class PostsPostsController extends AuthController {
 
   destroy() {
 
-    Post.destroy(this.params.route.id, (err, model) => {
+    this.authorize((accessToken, user) => {
 
-      this.respond(err || model);
+      // get user id for auth param
+      this.params.body.user_id = user.get('id');
+
+      Post.find(this.params.route.id, (err, model) => {
+
+        if ( model.get('user_id') == user.get('id') ){
+          Post.destroy(this.params.route.id, (err, model) => {
+            this.respond(err || model);
+          });
+        } else {
+          this.respond('not permited')
+        }
+      } )
 
     });
 

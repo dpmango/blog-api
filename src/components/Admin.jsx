@@ -43,6 +43,8 @@ class AdminLoginForm extends Component {
         // save the token
         Auth.authenticateUser(res.data.data[0].access_token);
 
+        // reload
+        window.location.href='/admin'
       })
       .catch(err => {
         if (err.response) {
@@ -86,21 +88,85 @@ class AdminLoginForm extends Component {
 }
 
 class AdminDashboard extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      posts: []
+    };
+
+  }
+
+  getPosts(){
+    axios.get(`${process.env.REACT_APP_API_ENDPOINT}/posts`)
+      .then(res => {
+        const posts = res.data.data;
+        this.setState({ posts });
+      });
+  }
+
+  handleDeleteClick(e, post){
+    e.preventDefault();
+
+    axios({
+      method: 'delete',
+      url: `${process.env.REACT_APP_API_ENDPOINT}/posts/${post}`,
+      data: {
+        access_token: Auth.getToken()
+      }
+      })
+      .then(res => {
+        console.log(res);
+        const posts = res.data.data[0].id;
+        // update the state
+        this.setState({
+          posts: this.state.posts.filter((val, i) => {
+            return val.id !== posts
+          })
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
+  handleEditClick(e, post){
+    e.preventDefault();
+    console.log(post);
+  }
+
+  // Component lifecycle
+  componentDidMount() {
+    this.getPosts();
+  }
+
+
   render(){
     return (
-      <h1>Hello admin</h1>
+      <div className='container'>
+        <h1>Manage posts</h1>
+        <h1> All {this.state.posts.length} posts </h1>
+        {this.state.posts.map(post =>
+          <div key={post.id}>
+            <h3>{post.id}: {post.title}</h3>
+            <div className=''>
+              {post.content}
+            </div>
+            <div>
+              Author: {post.user.username}
+            </div>
+            <div>
+              <a href='#' className='btn btn--primary' onClick={(e) => this.handleDeleteClick(e, post.id)}>удалить</a>
+              <a href='#' className='btn btn--primary' onClick={(e) => this.handleEditClick(e, post.id)}>редактировать</a>
+            </div>
+        </div>
+        )}
+      </div>
     );
   }
 }
 
 class Admin extends Component {
-  constructor(){
-    super()
-    this.state = {
-      isLoggedIn: false
-    };
-  }
-
   render() {
     let renderSubject = <AdminLoginForm/>
 
